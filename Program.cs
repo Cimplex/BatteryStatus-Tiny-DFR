@@ -32,7 +32,7 @@ AppDomain.CurrentDomain.ProcessExit += (s, e) => running = false;
 BatteryInfo battery = new();
 
 string currentIcon = "./Icons/unknown.svg";
-File.Copy(currentIcon, "battery_status.svg", overwrite: true);
+File.Copy(currentIcon, outputPath, overwrite: true);
 
 while (running)
 {
