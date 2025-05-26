@@ -34,3 +34,5 @@ sudo ./bin/Release/net9.0/linux-arm64/publish/BatteryStatus --output=/usr/share/
 ## Additional Notes
 
 If you want to move BatteryStatus executable somewhere else, make sure the `./Icons/` folder gets moved with it. It needs to be in the working directory of the program.
+
+BatteryStatus-Tiny-DFR has a MIT License. It is NOT affiliated with tiny-dfr in anyway. Google Matrerial Icons are licensed under Apache License Version 2.0. 
