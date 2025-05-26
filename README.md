@@ -1,6 +1,12 @@
 # BatteryStatus-Tiny-DFR
 This is a simple dotnet AOT program that will check your battery status and update tiny-dfr to show a "dynamic-ish" icon"
 
+## Configure Tiny-DFR
+
+Edit your `/usr/share/tiny-dfr/config.toml` to include the following:
+
+`    { Icon = "battery_status",  Action = "Battery"        }`
+
 ## Building
 
 Dependencies: `sudo dnf install dotnet-sdk-9.0 clang gcc gcc-c++ make cmake`
