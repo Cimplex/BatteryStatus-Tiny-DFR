@@ -26,6 +26,9 @@ Requires elevated privileges to restart tiny-dfr:
 #### (With AOT)
 
 ```
-cd ./bin/Release/net9.0/linux-arm64/publish/
-sudo ./BatteryStatus --output=/usr/share/tiny-dfr/battery_status.svg --restart-tiny-dfr
+sudo ./bin/Release/net9.0/linux-arm64/publish/BatteryStatus --output=/usr/share/tiny-dfr/battery_status.svg --restart-tiny-dfr
 ```
+
+## Additional Notes
+
+If you want to move BatteryStatus executable somewhere else, make sure the `./Icons/` folder gets moved with it. It needs to be in the working directory of the program.
