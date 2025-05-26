@@ -1,0 +1,13 @@
+[Unit]
+Description=Battery Status Service
+After=tiny-dfr.service
+
+[Service]
+WorkingDirectory=/opt/BatteryStatus
+ExecStart=/opt/BatteryStatus/BatteryStatus --output=/usr/share/tiny-dfr/battery_status.svg --restart-tiny-dfr
+Restart=on-failure
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
