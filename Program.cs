@@ -1,6 +1,8 @@
 ﻿// Parse Arguement: --output=./Icons/battery_status.svg
 // Parse Arguement: --restart-tiny-dfr
 
+using System.Diagnostics;
+
 string outputPath = string.Empty;
 bool restartTinyDfr = false;
 
@@ -84,7 +86,7 @@ while (running)
             try
             {
                 Console.WriteLine("Restarting tiny-dfr service...");
-                System.Diagnostics.Process.Start("systemctl", "restart tiny-dfr");
+                await TinyDFRHelper.RestartService();
             }
             catch (Exception ex)
             {
@@ -98,7 +100,28 @@ while (running)
 
 Console.WriteLine("Exiting...");
 
-public class BatteryInfo
+static class TinyDFRHelper
+{
+    public static async Task RestartService()
+    {
+        Process? process = null;
+        try
+        {
+            process = Process.Start("service", "tiny-dfr restart");
+            await process.WaitForExitAsync();
+        }
+        catch
+        {
+            throw;
+        }
+        finally
+        {
+            process?.Dispose();
+        }
+    }
+}
+
+class BatteryInfo
 {
     private readonly bool _valid;
 
