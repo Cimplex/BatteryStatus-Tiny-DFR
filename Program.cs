@@ -1,6 +1,7 @@
 ﻿// Parse Arguement: --output=./Icons/battery_status.svg
 // Parse Arguement: --restart-tiny-dfr
 
+using System.ComponentModel.Design;
 using System.Diagnostics;
 
 string outputPath = string.Empty;
@@ -52,8 +53,7 @@ while (running)
                 >= 56 => "./Icons/charging4.svg",
                 >= 42 => "./Icons/charging3.svg",
                 >= 28 => "./Icons/charging2.svg",
-                >= 14 => "./Icons/charging1.svg",
-                _ => "./Icons/charging0.svg",
+                _ => "./Icons/charging1.svg",
             },
             { Charging: false, Percentage: int percentage } => percentage switch
             {
