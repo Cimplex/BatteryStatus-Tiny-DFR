@@ -16,7 +16,7 @@ jobs:
         run: dotnet publish -c Release -r linux-x64 -p:DebugType=none --self-contained true
 
       - name: Upload x64 Build Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build-x64
           path: ./bin/Release/net9.0/linux-x64/publish/BatteryStatus
@@ -31,7 +31,7 @@ jobs:
         run: dotnet publish -c Release -r linux-arm64 -p:DebugType=none --self-contained true
       
       - name: Upload arm64 Build Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build-arm64
           path: ./bin/Release/net9.0/linux-arm64/publish/BatteryStatus
@@ -55,7 +55,7 @@ jobs:
           mkdir ./release-arm64/
 
       - name: Download x64 Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-x64
           path: ./release-x64
@@ -64,7 +64,7 @@ jobs:
         run: zip -r "./dist/BatteryStatus-${GITHUB_REF##*/}-linux-x64.zip" ./release-x64/BatteryStatus ./batterystatus.service ./Icons
 
       - name: Download arm64 Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-arm64
           path: ./release-arm64
