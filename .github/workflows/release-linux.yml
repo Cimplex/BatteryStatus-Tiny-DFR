@@ -92,7 +92,6 @@ jobs:
         with:
           tag_name: ${{ env.TAG_NAME }}
           release_name: Release ${{ env.TAG_NAME }}
+          files: ./releases/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: ./releases/*
