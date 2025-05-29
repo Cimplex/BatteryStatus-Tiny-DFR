@@ -15,25 +15,11 @@ jobs:
       - name: Build for x64
         run: dotnet publish -c Release -r linux-x64 -p:DebugType=none --self-contained true
 
-      - name: Make Release Folder
-        run: mkdir ./release/
-
-      - name: Copy Binary (x64)
-        run: |
-          set -e
-          cp ./bin/Release/net9.0/linux-x64/publish/BatteryStatus ./BatteryStatus
-      
-      - name: Zip Release (x64)
-        run: |
-          set -e
-          zip -r "./release/BatteryStatus-${GITHUB_REF##*/}-linux-x64.zip" ./BatteryStatus ./batterystatus.service ./Icons
-          run: echo "X64_RELEASE=./release/BatteryStatus-${GITHUB_REF##*/}-linux-x64.zip" >> $GITHUB_ENV
-
       - name: Upload x64 Build Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: build-x64
-          path: ${{ env.X64_RELEASE }}
+          path: ./bin/Release/net9.0/linux-x64/publish/BatteryStatus
 
   build-arm64:
     runs-on: ubuntu-24.04-arm64
@@ -43,26 +29,12 @@ jobs:
 
       - name: Build for arm64
         run: dotnet publish -c Release -r linux-arm64 -p:DebugType=none --self-contained true
-
-      - name: Make Release Folder
-        run: mkdir ./release/
-
-      - name: Copy Binary (arm64)
-        run: |
-          set -e
-          cp ./bin/Release/net9.0/linux-x64/publish/BatteryStatus ./BatteryStatus
-      
-      - name: Zip Release (arm64)
-        run: |
-          set -e
-          zip -r "./release/BatteryStatus-${GITHUB_REF##*/}-linux-arm64.zip" ./BatteryStatus ./batterystatus.service ./Icons
-          run: echo "ARM64_RELEASE=./release/BatteryStatus-${GITHUB_REF##*/}-linux-arm64.zip" >> $GITHUB_ENV
       
       - name: Upload arm64 Build Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: build-arm64
-          path: ${{ env.ARM64_RELEASE }}  # Adjust this to your arm64 build output path
+          path: ./bin/Release/net9.0/linux-arm64/publish/BatteryStatus
 
   release:
     runs-on: ubuntu-latest
@@ -75,23 +47,35 @@ jobs:
         id: get_tag_name
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
+      - name: Make Release Folders
+        run: |
+          set -e
+          mkdir ./dist/
+          mkdir ./release-x64/
+          mkdir ./release-arm64/
+
       - name: Download x64 Artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-x64
-          path: ./releases
+          path: ./release-x64
+
+      - name: Zip x64 Release
+        run: zip -r "./dist/BatteryStatus-${GITHUB_REF##*/}-linux-x64.zip" ./release-x64/BatteryStatus ./batterystatus.service ./Icons
 
       - name: Download arm64 Artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-arm64
-          path: ./releases 
+          path: ./release-arm64
+
+      - name: Zip arm64 Release
+        run: zip -r "./dist/BatteryStatus-${GITHUB_REF##*/}-linux-arm64.zip" ./release-arm64/BatteryStatus ./batterystatus.service ./Icons
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
-          files: ./releases/*
+          tag_name: ${{ github.ref_name }}
+          files: ./dist/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
