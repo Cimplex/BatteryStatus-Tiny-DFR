@@ -29,46 +29,46 @@ jobs:
           name: build-x64
           path: ./bin/Release/net9.0/linux-x64/publish/BatteryStatus
 
-  build-arm64:
-    runs-on: ubuntu-24.04-arm64
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build for arm64
-        run: dotnet publish -c Release -r linux-arm64 -p:DebugType=none --self-contained true
-      
-      - name: Upload arm64 Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-arm64
-          path: ./bin/Release/net9.0/linux-arm64/publish/BatteryStatus
-
+  #build-arm64:
+  #  runs-on: ubuntu-24.04-arm64
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@v2
+  #
+  #    - name: Setup .NET
+  #      uses: actions/setup-dotnet@v4
+  #      with:
+  #        dotnet-version: 9.0.x
+  #
+  #    - name: Restore dependencies
+  #      run: dotnet restore
+  #
+  #    - name: Build for arm64
+  #      run: dotnet publish -c Release -r linux-arm64 -p:DebugType=none --self-contained true
+  #
+  #    - name: Upload arm64 Build Artifacts
+  #      uses: actions/upload-artifact@v4
+  #      with:
+  #        name: build-arm64
+  #        path: ./bin/Release/net9.0/linux-arm64/publish/BatteryStatus
+  
   release:
     runs-on: ubuntu-latest
-    needs: [build-x64, build-arm64]  # Ensure this job runs after both builds
+    needs: [build-x64] #, build-arm64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+  
       - name: Set up tag name
         id: get_tag_name
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
-
+  
       - name: Make Release Folders
         run: |
           set -e
           mkdir ./dist/
           mkdir ./release-x64/
-          mkdir ./release-arm64/
+      #    mkdir ./release-arm64/
 
       - name: Download x64 Artifacts
         uses: actions/download-artifact@v4
@@ -79,14 +79,14 @@ jobs:
       - name: Zip x64 Release
         run: zip -r "./dist/BatteryStatus-${GITHUB_REF##*/}-linux-x64.zip" ./release-x64/BatteryStatus ./batterystatus.service ./Icons
 
-      - name: Download arm64 Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-arm64
-          path: ./release-arm64
-
-      - name: Zip arm64 Release
-        run: zip -r "./dist/BatteryStatus-${GITHUB_REF##*/}-linux-arm64.zip" ./release-arm64/BatteryStatus ./batterystatus.service ./Icons
+      #- name: Download arm64 Artifacts
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: build-arm64
+      #    path: ./release-arm64
+      #
+      #- name: Zip arm64 Release
+      #  run: zip -r "./dist/BatteryStatus-${GITHUB_REF##*/}-linux-arm64.zip" ./release-arm64/BatteryStatus ./batterystatus.service ./Icons
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
