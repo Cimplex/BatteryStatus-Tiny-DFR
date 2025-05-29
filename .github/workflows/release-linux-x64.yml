@@ -26,13 +26,12 @@ jobs:
     - name: Copy Icons and systemd template
       run: |
         set -e
-        cp -R ./Icons ./bin/Release/net9.0/linux-x64/publish/
-        cp batterystatus.service ./bin/Release/net9.0/linux-x64/publish/
+        cp ./bin/Release/net9.0/linux-x64/publish/BatteryStatus ./BatteryStatus
     - name: Zip published files
       run: |
         mkdir ./release/
         ZIP_FILE="BatteryStatus-${GITHUB_REF##*/}.zip"
-        zip -r "./release/$ZIP_FILE" ./bin/Release/net9.0/linux-x64/publish/
+        zip -r "./release/$ZIP_FILE" ./BatteryStatus ./batterystatus.service ./Icons
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
