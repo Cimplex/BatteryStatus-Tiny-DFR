@@ -39,7 +39,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.ref }}
-        release_name: BatteryStatus (${{ github.ref##*/ }})
-        files: BatteryStatus-${{ github.ref##*/ }}.zip
+        release_name: BatteryStatus (${{ github.ref.replace('refs/tags/', '') }})
+        files: BatteryStatus-${{ github.ref.replace('refs/tags/', '') }}.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
