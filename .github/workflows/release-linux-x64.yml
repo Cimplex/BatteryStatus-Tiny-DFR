@@ -30,16 +30,14 @@ jobs:
         cp batterystatus.service ./bin/Release/net9.0/linux-x64/publish/
     - name: Zip published files
       run: |
-        TAG_NAME=${GITHUB_REF##*/}  # Extract the tag name from the ref
-        ZIP_FILE="BatteryStatus-${TAG_NAME}.zip"
-        echo "Zipping: $ZIP_FILE"
-        zip -r "$ZIP_FILE" ./bin/Release/net9.0/linux-x64/publish/
+        mkdir ./release/
+        ZIP_FILE="BatteryStatus-${GITHUB_REF##*/}.zip"
+        zip -r "./release/$ZIP_FILE" ./bin/Release/net9.0/linux-x64/publish/
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.ref }}
-        release_name: BatteryStatus (${{ github.ref.replace('refs/tags/', '') }})
-        files: BatteryStatus-${{ github.ref.replace('refs/tags/', '') }}.zip
+        files: ./release/*
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
