@@ -3,6 +3,9 @@ This is a simple dotnet AOT program that will check your battery status and upda
 
 <a href="https://t.co/CkxPfWYqdu">pic.twitter.com/CkxPfWYqdu</a>
 
+## Installing
+See <a href="https://github.com/Cimplex/BatteryStatus-Tiny-DFR/releases">Releases</a> for details on how to install pre-built binaries.
+
 ## Configure Tiny-DFR
 
 Edit your `/usr/share/tiny-dfr/config.toml` to include the following:
