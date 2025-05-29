@@ -28,11 +28,16 @@ jobs:
         set -e
         cp -R ./Icons ./bin/Release/net9.0/linux-x64/publish/
         cp batterystatus.service ./bin/Release/net9.0/linux-x64/publish/
+    - name: Zip published files
+      run: |
+        TAG_NAME=${GITHUB_REF##*/}  # Extract the tag name from the ref
+        ZIP_FILE="BatteryStatus-${TAG_NAME}.zip"
+        zip -r "$ZIP_FILE" ./bin/Release/net9.0/linux-x64/publish/
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref }}  # Use the tag that triggered the workflow
-        files: ./bin/Release/net9.0/linux-x64/publish/**  # Path to the published files
+        tag_name: ${{ github.ref }}
+        files: BatteryStatus-${{ github.ref }}.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
